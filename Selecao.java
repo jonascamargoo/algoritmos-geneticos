@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.ArrayList; // Usada no main de exemplo
 import java.util.Random;
 
+// Seleção por Roleta Viciada. Esta classe é projetada para implementar um método de seleção usado em Algoritmos Genéticos, especificamente a Seleção por Roleta Viciada (Roulette Wheel Selection). A seleção é o processo de escolher quais indivíduos de uma população atual terão a chance de se reproduzir (passar por crossover e mutação) para formar a próxima geração. A ideia da roleta viciada é que indivíduos com "melhor" avaliação (fitness) tenham uma probabilidade maior de serem selecionados, mas indivíduos menos aptos ainda têm alguma chance, o que ajuda a manter a diversidade.
 public class Selecao {
 
     private static final Random random = new Random(); // Gerador de números aleatórios
@@ -64,7 +65,7 @@ public class Selecao {
      * Calcula a contribuição para a roleta (privado).
      */
     private static double calcularContribuicao(double avaliacao, boolean ehMinimizacao) {
-        if (ehMinimizacao) {
+        if (ehMinimizacao) { // Para o caso da NRainhas, pelo objetivo ser minimização, essa declaração será sempre verdadeira
             // Para NRainhas (minimizar ataques), usamos o inverso de (1 + ataques)
             if (avaliacao < 0) {
                  System.err.println("Aviso: Avaliação negativa em minimização: " + avaliacao + ". Tratando como 0.");
@@ -111,6 +112,12 @@ public class Selecao {
         for (int i = 0; i < 10; i++) { Individuo selecionado = selecionarPorRoleta(populacaoMax, false); System.out.println("Seleção " + (i + 1) + ": Avaliação=" + selecionado.getAvaliacao()); }
     }
     // Método auxiliar do main
-    private static Individuo createIndividuoTeste(double avaliacao) { return new Individuo() { private final double aval = avaliacao; @Override public List<Individuo> recombinar(Individuo i) { return null; } @Override public Individuo mutar() { return null; } @Override public double getAvaliacao() { return aval; } @Override public String toString() { return "Teste(Aval=" + aval + ")"; } }; }
+    private static Individuo createIndividuoTeste(double avaliacao) { return new Individuo() { private final double aval = avaliacao; @Override public List<Individuo> recombinar(Individuo i) { return null; } @Override public Individuo mutar() { return null; } @Override public double getAvaliacao() { return aval; } @Override public String toString() { return "Teste(Aval=" + aval + ")"; }
+
+    @Override
+    public int[] getGenes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getGenes'");
+    } }; }
 
 }
