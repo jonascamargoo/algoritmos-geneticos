@@ -147,12 +147,7 @@ public class MotorAG {
         }
 
         System.out.println("\n--- Fim da Execução do AG ---");
-        if (melhorGlobal != null) {
-             System.out.println("Melhor Indivíduo Global Encontrado:");
-             imprimirStatusDaGeracao(melhorGlobal, numeroMaxGeracoes); // Reusa o método de impressão
-        } else {
-            System.out.println("Nenhum indivíduo válido encontrado durante a execução.");
-        }
+
     }
 
 
