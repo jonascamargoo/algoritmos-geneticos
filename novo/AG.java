@@ -1,6 +1,8 @@
 package novo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -9,95 +11,142 @@ public class AG {
     // método para executar o ag propriamente dito
     public List<Individuo> executar(IndividuoFactory factory, int nGer, int nInd, int nElite) {
 
-        // Fazer um for para preencher uma lista com N individuos
-        List<Individuo> populacaoInicial = new ArrayList<>(nInd);
+        // Preenche a lista com N individuos iniciais
+        List<Individuo> populacao = new ArrayList<>(nInd);
+        for (int i = 0; i < nInd; i++) {
+            populacao.add(factory.getIndividuo());
+        }
 
         for (int ger = 0; ger < nGer; ger++) {
 
             // passei por parametro o conjunto de pais
-            List<Individuo> filhos = getFilhos(populacaoInicial);
-            List<Individuo> mutantes = getMutantes(populacaoInicial);
-            List<Individuo> popAux = new ArrayList<Individuo>(nInd*3);
-            popAux.addAll(populacaoInicial);
+            List<Individuo> filhos = getFilhos(populacao);
+            List<Individuo> mutantes = getMutantes(populacao);
+            List<Individuo> popAux = new ArrayList<Individuo>(populacao.size() + filhos.size() + mutantes.size());
+            popAux.addAll(populacao);
             popAux.addAll(filhos);
             popAux.addAll(mutantes);
 
             // para fazer pressão seletiva
-            populacaoInicial = selecao(popAux, nInd, nElite);
-
+            populacao = selecao(popAux, nInd, nElite);
             
-            imprimirMelhor(populacaoInicial, nGer);
+            imprimirMelhor(populacao, ger);
 
+            // Critério de parada: se encontrou a solução (0 colisões)
+            if (populacao.get(0).getAvaliacao() == 0) {
+                System.out.println("\nSOLUÇÃO ÓTIMA ENCONTRADA!");
+                break;
+            }
         }
 
-        return null;
-
+        return populacao;
     }
 
-    private void imprimirMelhor(List<Individuo> populacaoInicial, int nGer) {
-        Individuo ind0 = populacaoInicial.get(0);
-        boolean minimizacao = ind0.isMinimizacao();
+    private void imprimirMelhor(List<Individuo> populacao, int ger) {
+        Individuo melhor = populacao.get(0);
         // Imprimir o melhor indivíduo, numero da geracao desse individuo e a avaliação dele
-        // Levar em consideração se o problema é de min ou max
-
+        System.out.println("Geração: " + ger + " | Melhor Avaliação (Colisões): " + melhor.getAvaliacao() + " | " + melhor.toString());
     }
 
-    private List<Individuo> selecao(List<Individuo> popAux, int nInd, int nElite) {        
+    private List<Individuo> selecao(List<Individuo> popAux, int nInd, int nElite) {
         List<Individuo> newPop = new ArrayList<Individuo>();
 
         // verificar se o problema é de minimização
         Individuo ind0 = popAux.get(0);
         boolean minimizacao = ind0.isMinimizacao();
 
+        // Ordena a população auxiliar.
+        // Se for minimização, ordena do menor para o maior.
+        // Se for maximização, ordena do maior para o menor.
+        popAux.sort(new Comparator<Individuo>() {
+            @Override
+            public int compare(Individuo o1, Individuo o2) {
+                if (minimizacao) {
+                    return Double.compare(o1.getAvaliacao(), o2.getAvaliacao());
+                } else {
+                    return Double.compare(o2.getAvaliacao(), o1.getAvaliacao());
+                }
+            }
+        });
+
         // -----------------------
         // Elitismo
         // -----------------------
-        // se for de min, ordenar popAux de menor para maior avaliacao, caso contrário, ordenar da maior para a menor avaliacao  
-        // Selecionar os nElite individuos no início do popAux (os melhores)
-        // colocar os nElite individuos selecionaods na newPop.
-
+        for (int i = 0; i < nElite; i++) {
+            newPop.add(popAux.get(i));
+        }
+        
+        // Remove os indivíduos de elite da população auxiliar para não participarem da roleta
+        List<Individuo> roletaList = new ArrayList<>(popAux.subList(nElite, popAux.size()));
 
         // -----------------------
         // Roleta viciada
         // -----------------------
-        // maximização: 1 - obter a soma (soma1) das avaliações de todos os indivíduos que irão participar da roleta. 2 - Gerar um número aleatório (r) que vai de 0 ao somatório. 3 - Para selecionar um indivíduo da minha lista, vou percorrendo a lista somando (soma2) novamente a avaliação até obter um valor de soma maior que o valor aleatório (soma2 > r). 4 - retirar o indivíduo selecionado para newPop e voltar para o passo 1 (a soma deve ser refeita toda novamente)
-        // minimização: 0 - inverter a avaliação de todos os indivíduos na forma (1/avaliacao) e utilizar estes novos valores para os passos 1, 2 e 3. 1 - obter a soma (soma1) das avaliações de todos os indivíduos que irão participar da roleta. 2 - Gerar um número aleatório (r) que vai de 0 ao somatório. 3 - Para selecionar um indivíduo da minha lista, vou percorrendo a lista somando (soma2) novamente a avaliação até obter um valor de soma maior que o valor aleatório (soma2 > r). 4 - retirar o indivíduo selecionado para newPop e voltar para o passo 1 (a soma deve ser refeita toda novamente)
+        Random rd = new Random();
+        int nSelecionar = nInd - nElite;
 
-        // OBS: realizar os passos 1, 2, 3 e 4 n vezes até completar newPop.size() = nInd
+        for (int i = 0; i < nSelecionar; i++) {
+            double somaAvaliacoes = 0;
+            // Para minimização, inverte-se o valor da avaliação para que os menores tenham maior "fatia"
+            if (minimizacao) {
+                for (Individuo ind : roletaList) {
+                    // Adiciona 1 para evitar divisão por zero se a avaliação for 0
+                    somaAvaliacoes += 1.0 / (ind.getAvaliacao() + 1.0);
+                }
+            } else {
+                for (Individuo ind : roletaList) {
+                    somaAvaliacoes += ind.getAvaliacao();
+                }
+            }
+
+            double valorSorteado = rd.nextDouble() * somaAvaliacoes;
+            double somaParcial = 0;
+            Individuo selecionado = null;
+
+            for (Individuo ind : roletaList) {
+                double fitness = minimizacao ? (1.0 / (ind.getAvaliacao() + 1.0)) : ind.getAvaliacao();
+                somaParcial += fitness;
+                if (somaParcial >= valorSorteado) {
+                    selecionado = ind;
+                    break;
+                }
+            }
+            // Fallback para caso de imprecisão de ponto flutuante
+            if(selecionado == null){
+                selecionado = roletaList.get(roletaList.size() - 1);
+            }
+            
+            newPop.add(selecionado);
+            roletaList.remove(selecionado); // Remove para não ser selecionado novamente
+        }
 
         return newPop;
-
     }
 
-    private List<Individuo> getMutantes(List<Individuo> populacaoInicial) {
-        // TODO percorrer a lista de pais e a cada pai obter o seu mutante, retornando uma lista de mutantes
+    private List<Individuo> getMutantes(List<Individuo> populacao) {
         List<Individuo> mutantesList = new ArrayList<Individuo>();
+        for(Individuo pai : populacao) {
+            mutantesList.add(pai.mutar());
+        }
         return mutantesList;
     }
 
-    private List<Individuo> getFilhos(List<Individuo> populacaoInicial) {
+    private List<Individuo> getFilhos(List<Individuo> populacao) {
         List<Individuo> filhosList = new ArrayList<Individuo>();
 
         List<Individuo> paisList = new ArrayList<Individuo>();
-        paisList.addAll(populacaoInicial);
+        paisList.addAll(populacao);
+        Collections.shuffle(paisList); // Embaralha para tornar a seleção de pares aleatória
         Random rd = new Random();
 
-        for (int i = 0; i < populacaoInicial.size()/2; i++) {
-            int r1 = rd.nextInt(paisList.size());
-            Individuo p1 = paisList.get(r1);
-            paisList.remove(r1);
-
-            int r2 = rd.nextInt(paisList.size());
-            Individuo p2 = paisList.get(r2);
+        for (int i = 0; i < populacao.size() / 2; i++) {
+            Individuo p1 = paisList.get(2 * i);
+            Individuo p2 = paisList.get(2 * i + 1);
+            
             List<Individuo> filhos = p1.recombinar(p2);
             filhosList.addAll(filhos);
-
         }
 
         return filhosList;
     }
 }
-
-
-// Descrição do algoritmo
-// inicialmente temos 20 individuos, consequentemente 20 pais. Na primeira execução gera 20 filhos e 20 mutantes (3 listas até agora: pai, filhos e mutantes). Agora juntaremos essas três listas em uma lista auxiliar (popAux) com 60 indivíduos. Aplicaremos uma seleção que resultara em uma nova população (newPop) de 20 indivíduos (com uma pressão seletiva para gerar sempre os melhores). Por fim, esse newPop será os pais da nova geração.
