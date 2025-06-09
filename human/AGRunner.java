@@ -1,4 +1,4 @@
-package novo;
+package human;
 
 import java.util.List;
 
@@ -7,12 +7,10 @@ public class AGRunner {
         IndividuoFactory factory = new IndividuoNRainhasFactory(8);
 
         AG ag = new AG();
-        List<Individuo> indList = ag.executar(factory, 2000, 40, 8);
+        // List<Individuo> indList = ag.executar(factory, 2000, 40, 8);
+        ag.executar(factory, 2000, 40, 8);
         
     }
-
-
-   
 
     
 }

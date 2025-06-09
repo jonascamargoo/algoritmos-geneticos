@@ -1,3 +1,4 @@
+package ai;
 import java.util.List;
 
 // A ideia de ter interface indivíduos é que podemos utilizar para mais de um problema de AG. Ainda dentro do mesmo problema, podemos ter operações diferentes.

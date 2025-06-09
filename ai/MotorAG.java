@@ -1,7 +1,10 @@
+package ai;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays; // Para Arrays.toString()
 import java.util.Random;
+
+import ai.NRainhasIndividuos.NRainhasFactory;
 
 public class MotorAG {
 

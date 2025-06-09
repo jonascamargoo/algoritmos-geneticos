@@ -1,4 +1,4 @@
-package novo;
+package human;
 
 import java.util.List;
 
