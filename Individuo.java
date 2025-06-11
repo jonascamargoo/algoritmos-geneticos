@@ -1,5 +1,3 @@
-package human;
-
 import java.util.List;
 
 public abstract class Individuo {

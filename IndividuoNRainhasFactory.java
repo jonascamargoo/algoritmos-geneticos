@@ -1,4 +1,4 @@
-package human;
+
 
 public class IndividuoNRainhasFactory implements IndividuoFactory{
     private int nRainhas;
