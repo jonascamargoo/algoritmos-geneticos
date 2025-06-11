@@ -1,5 +1,3 @@
-package human;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -137,7 +135,7 @@ public class AG {
         List<Individuo> paisList = new ArrayList<Individuo>();
         paisList.addAll(populacao);
         Collections.shuffle(paisList); // Embaralha para tornar a seleção de pares aleatória
-        Random rd = new Random();
+        // Random rd = new Random();
 
         for (int i = 0; i < populacao.size() / 2; i++) {
             Individuo p1 = paisList.get(2 * i);
