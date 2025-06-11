@@ -9,15 +9,15 @@ import java.util.Set;
 
 public class IndividuoNRainhas extends Individuo {
     private int nRainhas;
-    private int[] genes;
+    private double[] genes;
 
     public IndividuoNRainhas(int nRainhas) {
         this.nRainhas = nRainhas;
-        this.genes = new int[nRainhas];
+        this.genes = new double[nRainhas];
         // Inicializa o vetor de genes com uma permutação aleatória de 0 a n-1.
         // Isso garante que não há rainhas na mesma linha ou coluna.
-        List<Integer> permutacao = new ArrayList<>();
-        for (int i = 0; i < nRainhas; i++) {
+        List<Double> permutacao = new ArrayList<>();
+        for (double i = 0; i < nRainhas; i++) {
             permutacao.add(i);
         }
         Collections.shuffle(permutacao);
@@ -27,7 +27,7 @@ public class IndividuoNRainhas extends Individuo {
     }
 
     // Construtor privado para criar filhos e mutantes
-    private IndividuoNRainhas(int nRainhas, int[] genes) {
+    private IndividuoNRainhas(int nRainhas, double[] genes) {
         this.nRainhas = nRainhas;
         this.genes = genes;
     }
@@ -48,11 +48,11 @@ public class IndividuoNRainhas extends Individuo {
         }
 
         // Criar filhos
-        int[] genesFilho1 = new int[nRainhas];
-        int[] genesFilho2 = new int[nRainhas];
+        double[] genesFilho1 = new double[nRainhas];
+        double[] genesFilho2 = new double[nRainhas];
 
         // Lógica para o Filho 1
-        Set<Integer> genesP1Segmento = new HashSet<>();
+        Set<Double> genesP1Segmento = new HashSet<>();
         for (int i = ponto1; i <= ponto2; i++) {
             genesFilho1[i] = this.genes[i];
             genesP1Segmento.add(this.genes[i]);
@@ -69,7 +69,7 @@ public class IndividuoNRainhas extends Individuo {
         }
         
         // Lógica para o Filho 2
-         Set<Integer> genesP2Segmento = new HashSet<>();
+         Set<Double> genesP2Segmento = new HashSet<>();
         for (int i = ponto1; i <= ponto2; i++) {
             genesFilho2[i] = pai2.genes[i];
             genesP2Segmento.add(pai2.genes[i]);
@@ -96,7 +96,7 @@ public class IndividuoNRainhas extends Individuo {
     @Override
     public Individuo mutar() {
         Random rd = new Random();
-        int[] genesMutante = this.genes.clone();
+        double[] genesMutante = this.genes.clone();
 
         // Mutação por troca (Swap Mutation): troca duas posições.
         int pos1 = rd.nextInt(nRainhas);
@@ -107,7 +107,7 @@ public class IndividuoNRainhas extends Individuo {
             pos2 = rd.nextInt(nRainhas);
         }
 
-        int temp = genesMutante[pos1];
+        double temp = genesMutante[pos1];
         genesMutante[pos1] = genesMutante[pos2];
         genesMutante[pos2] = temp;
 
