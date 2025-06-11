@@ -9,7 +9,7 @@ public class DixonPriceIndFactory implements IndividuoFactory {
 
     @Override
     public Individuo getIndividuo() {
-         // O domínio da função Dixon-Price é geralmente [-10, 10]
+        // O domínio da função Dixon-Price é geralmente [-10, 10]
         return new DixonPriceInd(this.dimensao, this.tipoCrossover, -10, 10);
     }
 }

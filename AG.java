@@ -13,11 +13,9 @@ public class AG {
             populacao.add(factory.getIndividuo());
         }
 
-        // --- INÍCIO: VARIÁVEIS PARA CRITÉRIO DE PARADA POR CONVERGÊNCIA ---
         double melhorAvaliacaoGeral = Double.POSITIVE_INFINITY;
         int geracoesSemMelhoria = 0;
         final int CONVERGENCIA = 200;
-        // --- FIM: VARIÁVEIS ---
 
         for (int ger = 0; ger < nGer; ger++) {
 
@@ -94,7 +92,6 @@ public class AG {
             double somaAvaliacoes = 0;
             if (minimizacao) {
                 for (Individuo ind : roletaList) {
-                    // Lógica original da roleta para minimização
                     somaAvaliacoes += 1.0 / (ind.getAvaliacao() + 1.0);
                 }
             } else {

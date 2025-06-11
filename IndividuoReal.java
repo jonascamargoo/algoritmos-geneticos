@@ -46,7 +46,6 @@ public abstract class IndividuoReal extends Individuo {
         if (this.tipoCrossover == TipoCrossover.BLX_ALPHA) {
             return recombinarBlxAlpha(p2);
         }
-        // O padrão é o Aritmético
         return recombinarAritmetico(p2);
     }
 
