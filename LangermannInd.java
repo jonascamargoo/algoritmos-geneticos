@@ -39,8 +39,7 @@ public class LangermannInd extends IndividuoReal {
             outer += c[i] * Math.exp(-inner / Math.PI) * Math.cos(Math.PI * inner);
         }
         
-        // A função de Langermann é normalmente maximizada. Para usar nosso AG de minimização,
-        // retornamos o valor negativo.
+        // Para usar nosso AG de minimização, só retornar o valor negativo
         this.avaliacao = -outer; 
         this.avaliado = true;
         return this.avaliacao;

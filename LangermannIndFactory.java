@@ -2,7 +2,6 @@ public class LangermannIndFactory implements IndividuoFactory {
     private IndividuoReal.TipoCrossover tipoCrossover;
 
     public LangermannIndFactory(IndividuoReal.TipoCrossover tipoCrossover) {
-        // A dimensão está fixa em 2 para esta implementação
         this.tipoCrossover = tipoCrossover;
     }
 

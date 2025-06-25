@@ -32,7 +32,7 @@ public class AG {
             
             Individuo melhorDaGeracao = populacao.get(0);
 
-            // --- INÍCIO: LÓGICA DE PARADA POR CONVERGÊNCIA ---
+            // --- Início da lógica de parar na convergência ---
             if (melhorDaGeracao.getAvaliacao() < melhorAvaliacaoGeral) {
                 melhorAvaliacaoGeral = melhorDaGeracao.getAvaliacao();
                 geracoesSemMelhoria = 0;
@@ -45,7 +45,7 @@ public class AG {
                 System.out.println("O algoritmo parou na geração " + ger + " por não apresentar melhorias nas últimas " + CONVERGENCIA + " gerações.");
                 break;
             }
-            // --- FIM: LÓGICA DE PARADA ---
+            // --- Fim da lógica de parada ---
 
             if (melhorDaGeracao.getAvaliacao() == 0) {
                 System.out.println("\nSOLUÇÃO ÓTIMA ENCONTRADA!");

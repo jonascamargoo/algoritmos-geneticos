@@ -12,9 +12,17 @@ public class AGRunner {
         // IndividuoFactory griewankFactoryBlx = new GriewankIndFactory(10, IndividuoReal.TipoCrossover.BLX_ALPHA);
         // executarAG(griewankFactoryBlx, N_GER, N_IND, N_ELITE);
 
+
+
         // System.out.println("\n\n--- OTIMIZANDO FUNÇÃO GRIEWANK (ARITMÉTICO) ---");
         // IndividuoFactory griewankFactoryArit = new GriewankIndFactory(10, IndividuoReal.TipoCrossover.ARITMETICO);
         // executarAG(griewankFactoryArit, N_GER, N_IND, N_ELITE);
+
+
+
+
+
+
 
 
         // Exemplo 2: Otimizando DIXON-PRICE (d=10), com Crossover ARITMÉTICO

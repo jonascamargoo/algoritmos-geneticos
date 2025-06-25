@@ -17,9 +17,7 @@ public abstract class IndividuoReal extends Individuo {
     protected int dimensao;
     protected TipoCrossover tipoCrossover;
 
-    /**
-     * Construtor para criar um indivíduo aleatório dentro de um intervalo.
-     */
+    // Construtor para criar um indivíduo aleatório dentro de um intervalo.
     public IndividuoReal(int dimensao, TipoCrossover tipoCrossover, double minRange, double maxRange) {
         this.minimizacao = true; // Funções de benchmark são de minimização
         this.dimensao = dimensao;
@@ -31,9 +29,7 @@ public abstract class IndividuoReal extends Individuo {
         }
     }
 
-    /**
-     * Construtor para criar um indivíduo a partir de genes pré-definidos (filhos).
-     */
+    // Construtor para criar um indivíduo a partir de genes pré-definidos (filhos).
     protected IndividuoReal(double[] genes, int dimensao, TipoCrossover tipoCrossover) {
         this.minimizacao = true;
         this.dimensao = dimensao;
@@ -52,7 +48,7 @@ public abstract class IndividuoReal extends Individuo {
     private List<Individuo> recombinarAritmetico(Individuo p2) {
         IndividuoReal pai2 = (IndividuoReal) p2;
         Random rd = new Random();
-        double alpha = rd.nextDouble(); // Alpha aleatório para o crossover aritmético
+        double alpha = rd.nextDouble(); // Alpha aleatório pro crossover aritmético
 
         double[] genesFilho1 = new double[dimensao];
         double[] genesFilho2 = new double[dimensao];
@@ -110,7 +106,6 @@ public abstract class IndividuoReal extends Individuo {
         return criarFilho(genesMutante);
     }
     
-    // Método abstrato que força as subclasses a criarem uma instância de si mesmas.
     // Isso é necessário para que a recombinação e mutação possam gerar filhos do tipo correto.
     public abstract Individuo criarFilho(double[] genes);
 
